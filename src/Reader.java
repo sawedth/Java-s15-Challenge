@@ -36,6 +36,8 @@ public class Reader extends Person{
     public void removeBook(Book book){
         if(books.contains(book)){
             books.remove(book);
+        }else{
+            System.out.println("Don't Contains");
         }
     }
 

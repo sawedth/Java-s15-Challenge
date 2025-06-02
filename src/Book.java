@@ -38,7 +38,7 @@ public class Book {
     }
 
     public void changeOwner(Person owner){
-        if(status != Status.WAITING){
+        if(this.status == Status.WAITING){
             this.owner = owner;
             this.status = Status.RENTED;
         }

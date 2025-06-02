@@ -1,4 +1,5 @@
 import java.util.IllegalFormatPrecisionException;
+import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
@@ -88,6 +89,117 @@ public class Main {
         library.borrowBook(1,22);
         System.out.println("**************************");
 
+        wakeTheLibrary(library);
+    }
 
+    public static void wakeTheLibrary(Library library){
+        Scanner scanner = new Scanner(System.in);
+        boolean isOpen = true;
+        System.out.println("Welcome to the Library");
+        while(isOpen){
+            System.out.println("Please insert next operation you want to do");
+            System.out.println("add => Adding Book");
+            System.out.println("getid => Get Book by Id");
+            System.out.println("getname => Get Book by Name");
+            System.out.println("update => Updating a Book");
+            System.out.println("listcategory => List All Books from a Category");
+            System.out.println("listauthor => List All Books Written by a Author");
+            System.out.println("lend => Lend a Book to a Reader");
+            System.out.println("return => Return a Book from the Reader");
+            System.out.println("close => Close the Library");
+            String operation = scanner.next();
+            operation = operation.replaceAll("\\p{Punct}","");
+            operation = operation.replace(" ", "");
+            operation = operation.replaceAll("[0-9]", "");
+
+            switch (operation){
+                case "add":
+                    Scanner bookAdd = new Scanner(System.in);
+                    System.out.println("Please insert book id");
+                    int bookId = Integer.parseInt(bookAdd.nextLine());
+                    System.out.println("Please insert Author's first name");
+                    String authorName = bookAdd.nextLine();
+                    System.out.println("Please insert Author's last name");
+                    String authorLast = bookAdd.nextLine();
+                    System.out.println("Please insert title of the book");
+                    String title = bookAdd.nextLine();
+                    System.out.println("Please insert price of the book");
+                    double price = Double.parseDouble(bookAdd.nextLine());
+                    System.out.println("Please insert edition of the book");
+                    int edition = Integer.parseInt(bookAdd.nextLine());
+                    System.out.println("Please insert date of purchase (DD-MM-YYYY)");
+                    String date = bookAdd.nextLine();
+                    Book newBook = new Book(bookId, new Author(authorName, authorLast), title, price, edition, date);
+                    library.addBook(newBook);
+                    break;
+                case "getid":
+                    System.out.println("Please insert Book Id");
+                    int findId = scanner.nextInt();
+                    library.getBook(findId);
+                    break;
+                case "getname":
+                    Scanner getNameSc = new Scanner(System.in);
+                    System.out.println("Please insert book name");
+                    String findName = getNameSc.nextLine();
+                    library.getBook(findName);
+                    break;
+                case "update":
+                    Scanner bookUpdate = new Scanner(System.in);
+                    System.out.println("Please insert book id");
+                    int bookId2 = Integer.parseInt(bookUpdate.nextLine());
+                    System.out.println("Please insert Author's first name");
+                    String authorName2 = bookUpdate.nextLine();
+                    System.out.println("Please insert Author's last name");
+                    String authorLast2 = bookUpdate.nextLine();
+                    System.out.println("Please insert title of the book");
+                    String title2 = bookUpdate.nextLine();
+                    System.out.println("Please insert price of the book");
+                    double price2 = Double.parseDouble(bookUpdate.nextLine());
+                    System.out.println("Please insert edition of the book");
+                    int edition2 = Integer.parseInt(bookUpdate.nextLine());
+                    System.out.println("Please insert date of purchase (DD-MM-YYYY)");
+                    String date2 = bookUpdate.nextLine();
+                    Book newBook2 = new Book(bookId2, new Author(authorName2, authorLast2), title2, price2, edition2, date2);
+                    library.updateBook(newBook2);
+                    break;
+                case"listcategory":
+                    Scanner listCato = new Scanner(System.in);
+                    System.out.println("Please insert name of the category");
+                    String catego = listCato.nextLine();
+                    library.getCategory(catego);
+                    break;
+                case "listauthor":
+                    Scanner listAu = new Scanner(System.in);
+                    System.out.println("Please insert Author's first name");
+                    String authorNameList = listAu.nextLine();
+                    System.out.println("Please insert Author's last name");
+                    String authorLastList = listAu.nextLine();
+                    Author auth = new Author(authorNameList, authorLastList);
+                    library.getBooksByAuthor(auth);
+                    break;
+                case "lend":
+                    System.out.println("Please insert book id");
+                    int lendBook = scanner.nextInt();
+                    System.out.println("Please insert reader id");
+                    int lendReader = scanner.nextInt();
+                    library.borrowBook(lendReader,lendBook);
+                    break;
+                case "return":
+                    System.out.println("Please insert book id");
+                    int returnBook = scanner.nextInt();
+                    System.out.println("Please insert reader id");
+                    int returnReader = scanner.nextInt();
+                    library.returnBook(returnReader,returnBook);
+                    break;
+                case "close":
+                    System.out.println("Have a Nice Day!");
+                    isOpen = false;
+                    break;
+                default:
+                    System.out.println("Wrong Command");
+                    break;
+            }
+
+        }
     }
 }
