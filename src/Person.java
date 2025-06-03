@@ -25,8 +25,16 @@ public class Person {
         this.surname = surname;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof Person person)) return false;
+        return Objects.equals(name.toLowerCase(), person.name.toLowerCase()) && Objects.equals(surname.toLowerCase(), person.surname.toLowerCase());
+    }
 
-
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, surname);
+    }
 
     @Override
     public String toString() {

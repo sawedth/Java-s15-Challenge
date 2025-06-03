@@ -7,6 +7,7 @@ public class Main {
 
         Person author1 = new Author("Yazar", "Bir");
         Person author2 = new Author("Yazar", "İki");
+        Person author3 = new Author("Tarkan", "Tevetoğlu");
 
         Person reader1 = new Reader("Okur", "Bir", "Dün", 1);
         Person reader2 = new Reader("Okur", "İki", "Dün", 2);
@@ -23,7 +24,13 @@ public class Main {
         Book book9 = new Magazines(9, (Author) author2, "Alakanın Gücü" , 99, 5,"Baya Önce");
         Book book10 = new Journals(10, (Author) author2, "Gücün Gücü" , 2, 5,"Baya Önce");
         Book book11 = new StudyBooks(11, (Author) author2, "Güç" , 0.1, 5,"Baya Önce");
+        Book book12 = new Magazines(12, (Author) author3, "Unutmamalı" , 8.75, 5,"2012");
+        Book book13 = new Magazines(13, (Author) author3, "Sevmeli" , 13.20, 5,"2012");
+        Book book14 = new Magazines(14, (Author) author3, "Vermeli" , 99, 5,"2012");
+        Book book15 = new Journals(15, (Author) author3, "Bilmeli" , 2, 5,"2012");
+        Book book16 = new StudyBooks(16, (Author) author3, "Avutabilmeli" , 0.1, 5,"2012");
 
+        //BOOKS ADDED
         library.addBook(book1);
         library.addBook(book2);
         library.addBook(book3);
@@ -35,8 +42,12 @@ public class Main {
         library.addBook(book9);
         library.addBook(book10);
         library.addBook(book11);
-        library.addBook(book1);
-
+        library.addBook(book12);
+        library.addBook(book13);
+        library.addBook(book14);
+        library.addBook(book15);
+        library.addBook(book16);
+        //READERS ADDED
         library.addReader((Reader) reader1);
         library.addReader((Reader) reader2);
         library.addReader((Reader) reader3);
@@ -88,7 +99,7 @@ public class Main {
         library.returnBook(1,22);
         library.borrowBook(1,22);
         System.out.println("**************************");
-
+        //LIBRARY IS AWOKE
         wakeTheLibrary(library);
     }
 
@@ -98,12 +109,14 @@ public class Main {
         System.out.println("Welcome to the Library");
         while(isOpen){
             System.out.println("Please insert next operation you want to do");
-            System.out.println("add => Adding Book");
+            System.out.println("addbook => Adding Book");
+            System.out.println("addreader => Adding Reader");
             System.out.println("getid => Get Book by Id");
             System.out.println("getname => Get Book by Name");
             System.out.println("update => Updating a Book");
             System.out.println("listcategory => List All Books from a Category");
             System.out.println("listauthor => List All Books Written by a Author");
+            System.out.println("listreader => List All Books Lended by the Reader");
             System.out.println("lend => Lend a Book to a Reader");
             System.out.println("return => Return a Book from the Reader");
             System.out.println("close => Close the Library");
@@ -113,7 +126,7 @@ public class Main {
             operation = operation.replaceAll("[0-9]", "");
 
             switch (operation){
-                case "add":
+                case "addbook":
                     Scanner bookAdd = new Scanner(System.in);
                     System.out.println("Please insert book id");
                     int bookId = Integer.parseInt(bookAdd.nextLine());
@@ -129,8 +142,40 @@ public class Main {
                     int edition = Integer.parseInt(bookAdd.nextLine());
                     System.out.println("Please insert date of purchase (DD-MM-YYYY)");
                     String date = bookAdd.nextLine();
-                    Book newBook = new Book(bookId, new Author(authorName, authorLast), title, price, edition, date);
+                    System.out.println("Please insert type of book: journal, magazine, study or typeless");
+                    boolean isValidType = false;
+                    Book newBook= new Book(bookId, new Author(authorName, authorLast), title, price, edition, date);
+                    while(!isValidType){
+                        String typeOfBook = bookAdd.nextLine();
+                        if(typeOfBook.equals("journal")){
+                            newBook = new Journals(bookId, new Author(authorName, authorLast), title, price, edition, date);
+                            isValidType = true;
+                        }else if(typeOfBook.equals("magazine")){
+                            newBook = new Magazines(bookId, new Author(authorName, authorLast), title, price, edition, date);
+                            isValidType = true;
+                        }else if(typeOfBook.equals("study")){
+                            newBook = new StudyBooks(bookId, new Author(authorName, authorLast), title, price, edition, date);
+                            isValidType = true;
+                        } else if (typeOfBook.equals("typeless")) {
+                            isValidType = true;
+                        }else {
+                            System.out.println("Please provide a valid typing");
+                        }
+                    }
                     library.addBook(newBook);
+                    break;
+                case "addreader":
+                    Scanner addReaderSc = new Scanner(System.in);
+                    System.out.println("Please insert readers first name");
+                    String addReaderFirst = addReaderSc.nextLine();
+                    System.out.println("Please insert readers last name");
+                    String addReaderLast = addReaderSc.nextLine();
+                    System.out.println("Please insert readers date of membership");
+                    String addReaderDate = addReaderSc.nextLine();
+                    System.out.println("Please insert readers id");
+                    int addReaderId = addReaderSc.nextInt();
+                    Reader newReader = new Reader(addReaderFirst, addReaderLast, addReaderDate, addReaderId);
+                    library.addReader(newReader);
                     break;
                 case "getid":
                     System.out.println("Please insert Book Id");
@@ -176,6 +221,14 @@ public class Main {
                     String authorLastList = listAu.nextLine();
                     Author auth = new Author(authorNameList, authorLastList);
                     library.getBooksByAuthor(auth);
+                    break;
+                case "listreader":
+                    Scanner listReader = new Scanner(System.in);
+                    System.out.println("Please insert reader id");
+                    int reader_ID = listReader.nextInt();
+                    for(Book readerBook:library.readerBooks(reader_ID)){
+                        System.out.println(readerBook);
+                    }
                     break;
                 case "lend":
                     System.out.println("Please insert book id");

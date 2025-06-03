@@ -45,6 +45,13 @@ public class Reader extends Person{
         return books;
     }
 
+    public int getMember_ID() {
+        return member_ID;
+    }
+
+    public void setMember_ID(int member_ID) {
+        this.member_ID = member_ID;
+    }
 
     public double getBill() {
         return bill;

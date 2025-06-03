@@ -1,7 +1,8 @@
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
-public class Library {
+public class Library implements Runnable{
     public Set<Book> books = new HashSet<>();
     public Set<Reader> readers = new HashSet<>();
 
@@ -19,9 +20,11 @@ public class Library {
             System.out.println("Reader added.");
             readers.add(reader);
         }else{
-            System.out.println("Reader is already added to Library");
+            System.out.println("This reader id already have a membership");
         }
     }
+
+
 
     public Book getBook(int id){
         for(Book book:books){
@@ -60,6 +63,8 @@ public class Library {
                 if(libBook.equals(book)){
                     books.remove(libBook);
                     books.add(book);
+                    book.setOwner(libBook.getOwner());
+                    book.setStatus(libBook.getStatus());
                     System.out.println("The book has been updated");
                     break;
                 }
@@ -117,18 +122,20 @@ public class Library {
                     if(reader.equals(reader1) && reader.getNo_books_issued() < 5){
                         for (Book book:books){
                             if(book.equals(book1) && book.getStatus() == Status.WAITING){
-                                book.changeOwner(reader);
-                                reader.setNo_books_issued(reader.getNo_books_issued() + 1);
-                                reader.addBook(book);
-                                reader.setBill(book.getPrice() + reader.getBill());
-                                System.out.println("Book borrowed");
-                                System.out.println("New bill of " + reader.getName() + " " + reader.getSurname() + ": " + reader.getBill());
+                                    book.changeOwner(reader);
+                                    reader.setNo_books_issued(reader.getNo_books_issued() + 1);
+                                    reader.addBook(book);
+                                    reader.setBill(book.getPrice() + reader.getBill());
+                                    System.out.println("Book borrowed");
+                                    System.out.println("New bill of " + reader.getName() + " " + reader.getSurname() + ": " + reader.getBill());
 
+
+                            }else if(book.equals(book1) && book.getStatus() == Status.RENTED){
+                                System.out.println("This book already rented to: " + book.getOwner());
                             }
                         }
-                    }else if(reader.getNo_books_issued() == 5){
-                        System.out.println("This reader reached borrowed book limit BURASI");
-
+                    }else if(reader.equals(reader1) && reader.getNo_books_issued() == 5){
+                        System.out.println("This reader reached borrowed book limit");
                     }
                 }
             }else{
@@ -141,7 +148,6 @@ public class Library {
     public void returnBook(int reader_ID, int book_ID){
         Reader reader1 = new Reader(null,null,null,reader_ID);
         Book book1 = new Book(book_ID, null,null,0,0,null);
-
         if(books.contains(book1)){
             if(readers.contains(reader1)){
                 for(Reader reader:readers){
@@ -171,5 +177,14 @@ public class Library {
         }else{
             System.out.println("There is no such book");
         }
+    }
+
+    public Set<Book> readerBooks(int reader_ID){
+        for(Reader reader:readers){
+            if(reader.getMember_ID() == reader_ID){
+                return reader.getBooks();
+            }
+        }
+        return null;
     }
 }

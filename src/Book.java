@@ -21,6 +21,12 @@ public class Book {
         this.date_of_purchase = date_of_purchase;
     }
 
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
+
+
     public String getName() {
         return title;
     }
@@ -42,6 +48,14 @@ public class Book {
             this.owner = owner;
             this.status = Status.RENTED;
         }
+    }
+
+    public Person getOwner() {
+        return owner;
+    }
+
+    public void setOwner(Person owner) {
+        this.owner = owner;
     }
 
     public void returned(){
